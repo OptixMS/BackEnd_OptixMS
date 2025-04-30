@@ -1,0 +1,32 @@
+{
+  "name": "optixms",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OptixMS/BackEnd_OptixMS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OptixMS/BackEnd_OptixMS/issues"
+  },
+  "homepage": "https://github.com/OptixMS/BackEnd_OptixMS#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "connect-flash": "^0.1.1",
+    "dotenv": "^16.5.0",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-session": "^1.18.1",
+    "form-data": "^4.0.2",
+    "multer": "^1.4.5-lts.2",
+    "node-fetch": "^2.7.0",
+    "pg": "^8.15.1"
+  }
+}
