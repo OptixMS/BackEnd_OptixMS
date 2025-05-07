@@ -1,3 +1,5 @@
+app.use(express.json());
+
 function isAuthenticated(req, res, next) {
     if (req.session.username) {
       next();
@@ -7,11 +9,11 @@ function isAuthenticated(req, res, next) {
   }
   
   module.exports = (req, res, next) => {
-    if (!req.session.userId) {
-      req.flash('error', 'You must be logged in to view this page');
-      return res.redirect('/login');
+    if (!req.session.username) {
+      return res.status(401).json({ success: false, message: 'Unauthorized. Silakan login dulu.' });
     }
     next();
   };
+  
   
   
