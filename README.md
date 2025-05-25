@@ -1,4 +1,4 @@
-# 🧠 OptixMS - Backend API
+# 🧠 OptiMS - Backend API
 
 OptixMS adalah sistem backend untuk manajemen monitoring alarm dan prediksi severity berbasis machine learning. Backend ini dikembangkan menggunakan **Express.js** dan terhubung ke **PostgreSQL** serta sistem **Flask ML** untuk prediksi.
 
