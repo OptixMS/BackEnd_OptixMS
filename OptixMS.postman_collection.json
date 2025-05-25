@@ -1,0 +1,434 @@
+{
+	"info": {
+		"_postman_id": "6641b907-f35d-4d71-9f76-6d639f8ea47c",
+		"name": "OptixMS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "44316762",
+		"_collection_link": "https://nashrkautsar.postman.co/workspace/Nashr-Kautsar's-Workspace~f5d5b1b2-6195-4212-8a5c-7a13cb07bd5b/collection/44316762-6641b907-f35d-4d71-9f76-6d639f8ea47c?action=share&source=collection_link&creator=44316762"
+	},
+	"item": [
+		{
+			"name": "API Running Test",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ql7m7dpr-5001.asse.devtunnels.ms",
+					"protocol": "https",
+					"host": [
+						"ql7m7dpr-5001",
+						"asse",
+						"devtunnels",
+						"ms"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API Register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"Ziyad\",\r\n    \"email\": \"ziyadfajri@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ql7m7dpr-5001.asse.devtunnels.ms/api/register",
+					"protocol": "https",
+					"host": [
+						"ql7m7dpr-5001",
+						"asse",
+						"devtunnels",
+						"ms"
+					],
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API Login",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"Ziyad\",\r\n    \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ql7m7dpr-5001.asse.devtunnels.ms/api/login",
+					"protocol": "https",
+					"host": [
+						"ql7m7dpr-5001",
+						"asse",
+						"devtunnels",
+						"ms"
+					],
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API forgot Password",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"thundernashr221@gmail.com\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://ql7m7dpr-5001.asse.devtunnels.ms/api/forgotpassword\n",
+					"protocol": "https",
+					"host": [
+						"ql7m7dpr-5001",
+						"asse",
+						"devtunnels",
+						"ms"
+					],
+					"path": [
+						"api",
+						"forgotpassword\n"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API Dashboard",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlppeWFkIiwiaWF0IjoxNzQ3OTI4Mjc0LCJleHAiOjE3NDc5MzE4NzR9.5RZy579PIaHh_EqRjaUx1x_ZmZQb5w8edq1Y2O9EkKU",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"Ziyad\",\r\n    \"password\": \"123456\"\r\n}"
+				},
+				"url": {
+					"raw": "https://ql7m7dpr-5001.asse.devtunnels.ms/api/dashboard",
+					"protocol": "https",
+					"host": [
+						"ql7m7dpr-5001",
+						"asse",
+						"devtunnels",
+						"ms"
+					],
+					"path": [
+						"api",
+						"dashboard"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API Predict",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IktoYWlyaSIsImlhdCI6MTc0NzkzMTE0OCwiZXhwIjoxNzQ3OTM0NzQ4fQ.81NukmkJtqDtGh6J06xq_iVXExIPe8X8pbtOMbuJ_dc",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "tanggal",
+							"value": "23-05-2025",
+							"type": "text"
+						},
+						{
+							"key": "csv_file",
+							"type": "file",
+							"src": "/C:/Users/thund/Downloads/Dummy_Alarm_Data_Variatif_Condong_Minor.csv"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://ql7m7dpr-5001.asse.devtunnels.ms/api/predict",
+					"protocol": "https",
+					"host": [
+						"ql7m7dpr-5001",
+						"asse",
+						"devtunnels",
+						"ms"
+					],
+					"path": [
+						"api",
+						"predict"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API Site Temperature",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IktoYWlyaSIsImlhdCI6MTc0NzkzMTE0OCwiZXhwIjoxNzQ3OTM0NzQ4fQ.81NukmkJtqDtGh6J06xq_iVXExIPe8X8pbtOMbuJ_dc",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "tanggal",
+							"value": "23-05-2025",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "csv_file",
+							"type": "file",
+							"src": "/C:/Users/thund/Downloads/Dummy_Alarm_Data_Variatif_Condong_Minor.csv",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "https://ql7m7dpr-5001.asse.devtunnels.ms/api/sitetemperature",
+					"protocol": "https",
+					"host": [
+						"ql7m7dpr-5001",
+						"asse",
+						"devtunnels",
+						"ms"
+					],
+					"path": [
+						"api",
+						"sitetemperature"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API Lihat Profile",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlppeWFkIiwiaWF0IjoxNzQ3OTI4Mjc0LCJleHAiOjE3NDc5MzE4NzR9.5RZy579PIaHh_EqRjaUx1x_ZmZQb5w8edq1Y2O9EkKU",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"Ziyad\",\r\n    \"password\": \"123456\"\r\n}"
+				},
+				"url": {
+					"raw": "https://ql7m7dpr-5001.asse.devtunnels.ms/api/account/Ziyad?Auth=bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlppeWFkIiwiaWF0IjoxNzQ3OTI4Mjc0LCJleHAiOjE3NDc5MzE4NzR9.5RZy579PIaHh_EqRjaUx1x_ZmZQb5w8edq1Y2O9EkKU",
+					"protocol": "https",
+					"host": [
+						"ql7m7dpr-5001",
+						"asse",
+						"devtunnels",
+						"ms"
+					],
+					"path": [
+						"api",
+						"account",
+						"Ziyad"
+					],
+					"query": [
+						{
+							"key": "Auth",
+							"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlppeWFkIiwiaWF0IjoxNzQ3OTI4Mjc0LCJleHAiOjE3NDc5MzE4NzR9.5RZy579PIaHh_EqRjaUx1x_ZmZQb5w8edq1Y2O9EkKU"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API Edit Profile",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlppeWFkIiwiaWF0IjoxNzQ3OTI4Mjc0LCJleHAiOjE3NDc5MzE4NzR9.5RZy579PIaHh_EqRjaUx1x_ZmZQb5w8edq1Y2O9EkKU",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"newUsername\": \"Fajri\",\r\n  \"newEmail\": \"ziyaybaru@mail.com\",\r\n  \"newPassword\": \"111111\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "https://ql7m7dpr-5001.asse.devtunnels.ms/api/account/Ziyad",
+					"protocol": "https",
+					"host": [
+						"ql7m7dpr-5001",
+						"asse",
+						"devtunnels",
+						"ms"
+					],
+					"path": [
+						"api",
+						"account",
+						"Ziyad"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API History",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IktoYWlyaSIsImlhdCI6MTc0ODE1NjUxMywiZXhwIjoxNzQ4MTYwMTEzfQ.7Vb8R9YbMXsdmSF53EQOoIiJLG7LrkWEjEcnaQV0x-8",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://ql7m7dpr-5001.asse.devtunnels.ms/api/history",
+					"protocol": "https",
+					"host": [
+						"ql7m7dpr-5001",
+						"asse",
+						"devtunnels",
+						"ms"
+					],
+					"path": [
+						"api",
+						"history"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "API Logout",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IlppeWFkIiwiaWF0IjoxNzQ3OTI4Mjc0LCJleHAiOjE3NDc5MzE4NzR9.5RZy579PIaHh_EqRjaUx1x_ZmZQb5w8edq1Y2O9EkKU",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"newUsername\": \"Fajri\",\r\n  \"newEmail\": \"ziyaybaru@mail.com\",\r\n  \"newPassword\": \"111111\"\r\n}\r\n"
+				},
+				"url": {
+					"raw": "https://ql7m7dpr-5001.asse.devtunnels.ms/api/logout",
+					"protocol": "https",
+					"host": [
+						"ql7m7dpr-5001",
+						"asse",
+						"devtunnels",
+						"ms"
+					],
+					"path": [
+						"api",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
