@@ -3,93 +3,112 @@ import pandas as pd
 import numpy as np
 import xgboost as xgb
 from datetime import datetime
+import os
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "✅ API XGBoost retraining + prediction from tanggal (POST + file upload) is running!"
+    return "✅ API XGBoost is running!"
 
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
         tanggal_str = request.form.get('tanggal')
-        dummy_file = request.files.get('dummy_file')
+        dummy_file = request.files.get('csv_file')
 
         if not tanggal_str or not dummy_file:
-            return jsonify({"error": "Parameter 'tanggal' dan 'dummy_file' wajib diisi."}), 400
+            return jsonify({"error": "Parameter 'tanggal' dan 'csv_file' wajib diisi."}), 400
 
-        # Load CSV dummy dan data pelatihan
         df_dummy = pd.read_csv(dummy_file)
+        # Pastikan 'Cleaned_Merged_data_alarm.csv' ada di direktori yang sama
         df_train = pd.read_csv("Cleaned_Merged_data_alarm.csv")
 
-        # Preprocessing waktu jadi UNIX timestamp
         for df in [df_train, df_dummy]:
+            # Konversi kolom tanggal ke Unix timestamp (detik)
             df["Last Occurred (ST)"] = pd.to_datetime(df["Last Occurred (ST)"], errors="coerce").astype(int) // 10**9
             df["Acknowledged On (ST)"] = pd.to_datetime(df["Acknowledged On (ST)"], errors="coerce").astype(int) // 10**9
 
-        # Gabungkan data pelatihan dan dummy
-        df_combined = pd.concat([df_train, df_dummy], ignore_index=True)
+        base_unix = int(pd.Timestamp(tanggal_str).timestamp())
 
-        # Validasi kolom Severity
-        if "Severity" not in df_combined.columns:
-            return jsonify({"error": "Kolom 'Severity' tidak ditemukan pada data gabungan."}), 400
+        # Tambahkan fitur waktu dan noise sebelum pemisahan train/test
+        for df in [df_train, df_dummy]:
+            df["Tanggal Input (UNIX)"] = base_unix
+            # Pastikan 'Last Occurred (ST)' adalah integer (Unix timestamp) sebelum digunakan
+            # untuk dt.hour dan dt.weekday
+            df["Hour"] = pd.to_datetime(df["Last Occurred (ST)"], unit='s').dt.hour
+            df["Weekday"] = pd.to_datetime(df["Last Occurred (ST)"], unit='s').dt.weekday
 
-        # Bersihkan data: hapus label invalid
-        df_combined = df_combined[df_combined["Severity"].notna()]
-        df_combined = df_combined[~df_combined["Severity"].isin(["", "nan", "NaN", np.nan, None])]
+        df_train["Synthetic Noise"] = 0
+        df_dummy["Synthetic Noise"] = np.random.normal(0, 1, size=len(df_dummy))
+        # Pastikan Tanggal Input (UNIX) unik untuk setiap baris dummy agar tidak ada duplikasi
+        df_dummy["Tanggal Input (UNIX)"] = [base_unix + i * 60 for i in range(len(df_dummy))]
 
-        # Konversi label ke float lalu ke int
-        try:
-            df_combined["Severity"] = df_combined["Severity"].astype(float)
-        except:
-            return jsonify({"error": "Gagal konversi Severity ke float. Pastikan semua nilai numerik."}), 400
+        # Memisahkan fitur (X) dan target (y)
+        X_train = df_train.drop(columns=["Severity"], errors="ignore")
+        y_train = df_train["Severity"]
 
-        if df_combined["Severity"].isna().any() or np.isinf(df_combined["Severity"]).any() or (df_combined["Severity"] > 1e6).any():
-            return jsonify({"error": "Label Severity mengandung nilai NaN, tak hingga, atau terlalu besar."}), 400
+        print("🧪 Fitur yang dipakai model:", X_train.columns.tolist())
 
-        df_combined["Severity"] = df_combined["Severity"].astype(int)
-
-        X = df_combined.drop(columns=["Severity"], errors="ignore")
-        y = df_combined["Severity"]
-
-        # Latih ulang model XGBoost
-        dtrain = xgb.DMatrix(X.values, label=y)
+        # Membuat DMatrix untuk XGBoost
+        dtrain = xgb.DMatrix(X_train.values, label=y_train)
         param = {
-            "objective": "multi:softprob",
-            "num_class": len(set(y)),
-            "eval_metric": "mlogloss"
+            "objective": "multi:softprob", # Untuk klasifikasi multi-kelas dengan probabilitas
+            "num_class": len(set(y_train)), # Jumlah kelas severity yang unik
+            "eval_metric": "mlogloss" # Metrik evaluasi
         }
-        model = xgb.train(param, dtrain, num_boost_round=50)
+        model = xgb.train(param, dtrain, num_boost_round=50) # Melatih model
 
-        # Siapkan baris input untuk tanggal target
+        # Mempersiapkan data input untuk prediksi
         input_df = df_dummy.drop(columns=["Severity"], errors="ignore").copy()
-        target_unix = int(pd.Timestamp(tanggal_str).timestamp())
-
-        # Tambahkan waktu ke semua baris
-        input_df["Last Occurred (ST)"] = target_unix
-        input_df["Acknowledged On (ST)"] = target_unix + np.random.randint(60, 3600, size=len(input_df))
-
         dinput = xgb.DMatrix(input_df.values)
-        probas_all = model.predict(dinput)
+        probas_all = model.predict(dinput) # Mendapatkan probabilitas untuk setiap kelas
 
-        # Tambahkan hasil prediksi ke dataframe
+        # Menentukan kelas prediksi berdasarkan probabilitas tertinggi
         input_df["Predicted Severity"] = [int(np.argmax(p)) for p in probas_all]
-        input_df["Confidence Score"] = [float(np.max(p)) for p in probas_all]
+
+        # --- Bagian Perbaikan untuk Menampilkan Setiap Severity ---
+        # Asumsi mapping severity: 0=Minor, 1=Warning, 2=Major, 3=Critical
+        severity_levels = {
+            0: "Minor",
+            1: "Warning",
+            2: "Major",
+            3: "Critical"
+        }
+
+        selected_results = []
+        found_severities = set()
+
+        # Iterasi melalui hasil prediksi untuk memilih satu contoh dari setiap severity
+        # Prioritaskan severity yang lebih tinggi jika ada duplikasi dalam data input
+        # atau ambil yang pertama ditemukan untuk setiap severity
+        for severity_value in sorted(severity_levels.keys(), reverse=True): # Mulai dari Critical (3) ke Minor (0)
+            # Filter baris yang memiliki 'Predicted Severity' ini dan belum ditambahkan
+            # Menggunakan .copy() untuk menghindari SettingWithCopyWarning
+            filtered_rows = input_df[input_df["Predicted Severity"] == severity_value].copy()
+
+            if not filtered_rows.empty:
+                # Ambil satu baris pertama dari severity ini
+                # Jika Anda ingin memilih baris tertentu (misal: yang paling relevan),
+                # Anda bisa menambahkan logika pengurutan di sini.
+                selected_row = filtered_rows.iloc[0]
+                selected_results.append(selected_row.to_dict())
+                found_severities.add(severity_value)
+
+        # Jika tidak ada hasil yang ditemukan untuk severity tertentu, dan Anda ingin
+        # memastikan ada 1 dari setiap severity, Anda perlu membuat data dummy untuk itu.
+        # Namun, berdasarkan permintaan "menampilkan masing masing dari setiap severity",
+        # ini menyiratkan bahwa data tersebut harus berasal dari prediksi.
+        # Jadi, kita hanya akan menampilkan yang ditemukan.
 
         return jsonify({
             "tanggal_input": tanggal_str,
-            "predicted_class": predicted_class,
-            "confidence_score": round(confidence, 4),
-            "raw_probabilities": probas.tolist(),
-            "input_row": input_row.iloc[0].to_dict()
+            "results": selected_results # Mengembalikan hasil yang sudah difilter
         })
 
     except Exception as e:
-        return jsonify({
-    "tanggal_input": tanggal_str,
-    "results": input_df.to_dict(orient="records")
-})
+        print(f"❌ Error di Flask /predict: {e}")
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=5002)

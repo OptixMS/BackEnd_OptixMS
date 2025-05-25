@@ -1,0 +1,6 @@
+alarm_description,Alarm ID,Alarm Source,Location Info,Other Information,Last Occurred (ST),Acknowledged On (ST),Fiber/Cable Name,Cleared By,Acknowledged By,Clearance Status,Acknowledgement Status,Alarm Serial Number
+1,13056,60,857,258,1745280000,1745283321,55,2,1,0,0,26231581
+1,4,9,466,59,1745366400,1745369381,82,2,1,1,1,25514712
+2,12587,16,934,44,1745452800,1745456102,64,0,2,1,1,27144638
+2,327,61,1035,152,1745539200,1745541392,49,1,2,1,1,27894085
+0,13669,16,361,196,1745625600,1745628155,1,0,1,0,1,25430692
