@@ -7,7 +7,6 @@ OptixMS adalah sistem backend untuk manajemen monitoring alarm dan prediksi seve
 - 🔐 Autentikasi berbasis JWT (login, register, logout, token blacklist)
 - 🔄 Forgot Password + Reset Password (via email)
 - 🧠 Prediksi severity dari file CSV melalui model ML (Flask)
-- 📥 Upload data CSV ke database
 - 📤 Export hasil encoding
 - 📊 History prediksi per user
 - 🧾 Middleware otorisasi per akun
